@@ -11,6 +11,7 @@ import com.ga.entity.User;
 @Service
 public class UserServiceImpl implements UserService {
 
+
     @Autowired
     private UserDao userDao;
 
@@ -22,6 +23,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User signup(User user) {
         return userDao.signup(user);
+    }
+
+    @Override
+    public User login(User user) {
+        return userDao.Login(user);
     }
 
 }

@@ -40,4 +40,19 @@ public class UserDaoImpl implements UserDao {
         }
         return user;
     }
+
+    @Override
+    public User Login(User user) {
+        Session session = sessionFactory.getCurrentSession();
+        User savedUser;
+        try{
+            session.getTransaction();
+            savedUser = (User)session.createQuery("FROM User u WHERE u.username = '" +
+                    user.getUsername() + "' AND u.password = '" +
+                    user.getPassword() + "'").getSingleResult();
+        }finally {
+            session.close();
+        }
+        return savedUser;
+    }
 }
