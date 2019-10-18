@@ -1,13 +1,20 @@
 package com.ga.service;
 
+import com.ga.entity.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
 import java.util.List;
 
-import com.ga.entity.User;
-
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
     public List<User> listUsers();
-    public User signup(User user);
-    public User login(User user);
+
+    public String signup(User user);
+
+    public String login(User user);
+
+    public User update(User user, Long userId);
+
+    public User delete(Long userId);
 
 }

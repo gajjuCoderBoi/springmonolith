@@ -1,6 +1,8 @@
 package com.ga.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -17,11 +19,47 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    public User() {}
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_profile_id")
+    private UserProfile userProfile;
 
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(name = "user_role_id")
+    private UserRole userRole;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinTable(name = "user_course",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = @JoinColumn(name = "course_id"))
+    private List<Course> courses;
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
+
+
+    public User() {
+    }
+
+    public UserProfile getUserProfile() {
+        return userProfile;
+    }
+
+    public UserRole getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
+    }
+
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
     }
 
     public Long getUserId() {
@@ -46,5 +84,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Course> addCourse(Course course) {
+        if(courses == null)
+            courses = new ArrayList<>();
+
+        courses.add(course);
+
+        return courses;
     }
 }
